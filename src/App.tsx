@@ -2,21 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 import './App.css'
 import axios from 'axios';
 
-interface Advice{
-  id: number;
-  advice: string;
-}
 
 function App() {
 
-  const [nome, setNome] = useState<String>();
-  const [advice, setAdvice] = useState<String>();
+  const [personagem, setPersonagem] = useState<any>();
+  const [imagem, setImagem] = useState<string>();
 
   const getData = useCallback( async()=> {
-    await axios.get('https://api.adviceslip.com/advice')
+    await axios.get('https://swapi.py4e.com/api/people/14')
     .then(function (response) {
      console.log(response.data);
-     setAdvice(response.data.slip.advice);
+     setPersonagem(response.data);
+     setImagem("http://www.nerdforever.com.br/image/catalog/Personagens/HanSolo-Fathead.png");
     })
     .catch(function (error) {
       console.error(error);
@@ -27,19 +24,26 @@ function App() {
     getData();
   }, [])
 
-  const defName = (nome: string) => {
-    setNome(nome);
+  const defImagem = (imagem: string) => {
+    setImagem(imagem);
   }
 
   return (
-    <div>
-      <strong>Ola {nome}</strong>
+    <div className = "App">
+      <header className="App-header">
+        <h1>Meu Personagem é....</h1>
+      </header>
+      
+      <div className="conteudo">
 
-      <strong>{advice}</strong>
-      <button onClick={() => defName('Tomate')}>Tomate</button>
-      <button onClick={() => defName('Batata')}>Batata</button>
-      <button onClick={() => defName('Beterraba')}>Beterraba</button>
+        <h1>{personagem && personagem.name}</h1>
 
+        {imagem && <img src={imagem} alt= "Imagem atual"/>}
+      </div>
+      
+      <button onClick={() => defImagem('http://www.nerdforever.com.br/image/catalog/Personagens/HanSolo-Fathead.png')} >Antes</button>
+      <button onClick={() => defImagem('https://i0.wp.com/ovicio.com.br/wp-content/uploads/han-solo-harrison-ford-158748.jpg?resize=683%2C1024&ssl=1')} >Depois</button>
+      
     </div>
   )
 }
